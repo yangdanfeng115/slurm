@@ -1,10 +1,16 @@
 root@trx:/home/ydf# docker ps
 CONTAINER ID   IMAGE                  COMMAND                  CREATED       STATUS         PORTS      NAMES
+
 10f3d1e77b5e   slurm-cluster:latest   "/entrypoint.sh"         4 hours ago   Up 4 hours                slurmd1
+
 69b8dd4d667a   slurm-cluster:latest   "/entrypoint.sh"         4 hours ago   Up 4 hours                slurmd2
+
 2310de17dbd1   slurm-cluster:latest   "/entrypoint.sh"         4 hours ago   Up 4 hours                slurmctld
+
 d92ff1e5f870   slurm-cluster:latest   "/entrypoint.sh"         4 hours ago   Up 9 minutes              slurmdb
+
 bcb2ee8b124f   mariadb:10.5           "docker-entrypoint.s…"   4 hours ago   Up 9 minutes   3306/tcp   mariadb
+
 
 🧱 集群容器结构说明
 容器名	镜像	作用	角色类型
@@ -23,19 +29,9 @@ mariadb	mariadb:10.5	运行 MariaDB 数据库，存储作业数据	数据库
 🔁 各组件之间的逻辑关系
 
 
-+-------------------+        +------------------+
-|                   |        |                  |
-|     slurmctld     +<------>+     slurmdbd      +<--> mariadb (数据库)
-|   (控制调度中心)  |        |  (账户信息服务)  |
-+--------+----------+        +--------+---------+
-         ^                            ^
-         |                            |
-         |                            |
-   +-----+------+              +------+-----+
-   |            |              |            |
-   |  slurmd1   |              |  slurmd2   |
-   |(计算节点1) |              |(计算节点2) |
-   +------------+              +------------+
+![在线图片](https://github.com/yangdanfeng115/slurm/blob/main/slurm.png)
+
+
 🔧 各组件的职责详细说明：
 🟢 slurmctld（控制节点）
 管理和调度作业（srun/sbatch 命令由它调度）
